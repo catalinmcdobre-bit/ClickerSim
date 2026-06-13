@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Clicker Pro</title>
+    <style>
+        body { margin: 0; height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; background: radial-gradient(circle, #2c3e50, #000); color: white; font-family: sans-serif; overflow: hidden; user-select: none; }
+        #menu { position: absolute; width: 100%; height: 100%; background: rgba(0,0,0,0.9); display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 200; }
+        .btn { padding: 20px 50px; margin: 10px; font-size: 1.5rem; border-radius: 15px; border: none; cursor: pointer; background: #00ffcc; font-weight: bold; width: 200px; }
+        #game { display: none; text-align: center; }
+        #score { font-size: 4rem; margin-bottom: 10px; }
+        #highScoreText { font-size: 1.2rem; color: #ffcc00; margin-bottom: 20px; }
+        #clickBtn { width: 180px; height: 180px; background: #00ffcc; border-radius: 50%; border: none; box-shadow: 0 0 30px #00ffcc; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+    <div id="menu">
+        <h1>Clicker Simulator</h1>
+        <button class="btn" onclick="startGame()">START</button>
+        <button class="btn" style="background: #ff4444;" onclick="exitGame()">EXIT</button>
+    </div>
+
+    <div id="game">
+        <div id="score">0</div>
+        <div id="highScoreText">High Score: 0</div>
+        <button id="clickBtn" onclick="addScore()"></button>
+    </div>
+
+    <script>
+        let score = 0;
+        let highScore = localStorage.getItem('myHighScore') || 0;
+        document.getElementById('highScoreText').innerText = "High Score: " + highScore;
+
+        const sound = new Audio('click.mp3');
+
+        function startGame() {
+            document.getElementById('menu').style.display = 'none';
+            document.getElementById('game').style.display = 'block';
+            sound.play().catch(e => console.log("Aștept interacțiune"));
+        }
+
+        function exitGame() {
+            // Încearcă să închidă tab-ul
+            window.close();
+            // Fallback dacă browserul refuză închiderea
+            alert("Poți închide tab-ul manual!");
+        }
+
+        function addScore() {
+            score++;
+            document.getElementById('score').innerText = score;
+            
+            if (score > highScore) {
+                highScore = score;
+                localStorage.setItem('myHighScore', highScore);
+                document.getElementById('highScoreText').innerText = "High Score: " + highScore;
+            }
+            
+            sound.currentTime = 0;
+            sound.play().catch(e => console.log("Eroare sunet"));
+        }
+    </script>
+</body>
+</html>
